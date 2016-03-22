@@ -16,6 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+package com.adamkunicki.vault
 
 data class VaultConfiguration(
     val adddress: String = VAULT_ADDRESS,

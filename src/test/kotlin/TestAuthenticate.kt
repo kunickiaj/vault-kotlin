@@ -1,4 +1,8 @@
-import com.github.kittinunf.fuel.httpGet
+
+import com.adamkunicki.vault.Vault
+import com.adamkunicki.vault.VaultConfiguration
+import com.adamkunicki.vault.api.Secret
+import org.junit.Assert
 import org.junit.Test
 import org.slf4j.LoggerFactory
 
@@ -25,17 +29,29 @@ class TestAuthenticate {
   companion object {
     val LOG = LoggerFactory.getLogger(TestAuthenticate::class.java)
   }
-  val token = "aad8d6c7-3ea8-26e4-4b1a-a5643028b991"
+  val token = "d25dd11c-ec80-b00c-31de-1c62222f356d"
   val address = "http://localhost:8200"
 
   @Test
-  fun testToken(): Unit {
-    val conf = VaultConfiguration(address, token)
-    val vault = Vault(conf)
+  fun testTokenSercretDeserializer(): Unit {
+    val secret = Secret.Deserializer().deserialize(javaClass.getResource("token.json").openStream().bufferedReader())
+    Assert.assertEquals("b054c1d3-bfdf-098b-79e7-fbe02197a3c2", secret.data["id"])
+  }
 
-    val secret = vault.auth.token(token)
+  @Test
+  fun testStuff(): Unit {
+    val vault = Vault(VaultConfiguration(address, token))
 
-    println(secret)
-    LOG.info(secret.toString())
+    LOG.info(vault.auth.token(token).toString())
+
+    val auths = vault.sys.auth.auths()
+
+    LOG.info(auths.toString())
+
+    LOG.info(vault.logical.write("secret/hello", listOf("value" to "world")).toString())
+
+    LOG.info(vault.logical.list("secret").toString())
+
+    LOG.info(vault.logical.read("secret/hello").toString())
   }
 }

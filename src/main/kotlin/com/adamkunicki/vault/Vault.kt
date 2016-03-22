@@ -16,9 +16,19 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+package com.adamkunicki.vault
 
-class Vault(val conf: VaultConfiguration) {
+import com.adamkunicki.vault.api.AuthToken
+import com.adamkunicki.vault.api.Authenticate
+import com.adamkunicki.vault.api.Logical
+import com.adamkunicki.vault.api.sys.Sys
+
+class Vault(private val conf: VaultConfiguration) {
   val auth = Authenticate(conf)
-}
+  val authToken = AuthToken(conf)
 
+  val logical = Logical(conf)
+
+  val sys = Sys(conf)
+}
 

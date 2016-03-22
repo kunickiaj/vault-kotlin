@@ -17,33 +17,10 @@
  * under the License.
  */
 
-class VaultConfigurationBuilder {
-  var address: String = ""
-  var token: String = ""
-  var openTimeout: String = ""
-  var proxyAddress: String = ""
-  var proxyPort: Int = 0
-  var proxyUsername: String = ""
-  var proxyPassword: String = ""
-  var readTimeout: Int = 0
-  var sslPemFile: String = ""
-  var sslPemPassphrase: String = ""
-  var sslCaCert: String = ""
-  var sslCaPath: String = ""
-  var sslVerify: Boolean = true
-  var sslTimeout: Int = 0
-  var timeout: Int = 0
+package com.adamkunicki.vault.api.sys
 
-  companion object {
-    fun builder(): VaultConfigurationBuilder {
-      return VaultConfigurationBuilder()
-    }
-  }
-  
-  fun withAddress(address: String): VaultConfigurationBuilder {
-    this.address = address
-    return this
-  }
+import com.adamkunicki.vault.VaultConfiguration
 
-
+class Sys(private val conf: VaultConfiguration) {
+  val auth = Auth(conf)
 }

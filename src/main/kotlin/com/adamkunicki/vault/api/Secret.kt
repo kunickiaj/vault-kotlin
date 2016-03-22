@@ -1,7 +1,3 @@
-import com.github.kittinunf.fuel.core.ResponseDeserializable
-import com.google.gson.JsonParser
-import java.io.Reader
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -20,6 +16,12 @@ import java.io.Reader
  * specific language governing permissions and limitations
  * under the License.
  */
+package com.adamkunicki.vault.api
+
+import com.github.kittinunf.fuel.core.ResponseDeserializable
+import com.github.salomonbrys.kotson.fromJson
+import com.google.gson.Gson
+import java.io.Reader
 
 data class Secret(
     val lease_id: String,
@@ -28,26 +30,6 @@ data class Secret(
     val data: Map<String, Any?>
 ) {
   class Deserializer : ResponseDeserializable<Secret> {
-    override fun deserialize(reader: Reader): Secret {
-      val parser = JsonParser()
-      val parsed = parser.parse(reader).asJsonObject
-      println(parsed)
-
-      val data = parsed.get("data").asJsonObject
-      val dataMap = data.entrySet().fold(mutableMapOf<String, String>()) { acc, next ->
-        if (next.value.isJsonPrimitive) {
-          acc.put(next.key, next.value.asString)
-        } else {
-          println(next.value)
-        }
-        acc
-      }
-      return Secret(
-          parsed.get("lease_id").asString,
-          parsed.get("renewable").asBoolean,
-          parsed.get("lease_duration").asInt,
-          dataMap
-      )
-    }
+    override fun deserialize(reader: Reader): Secret = Gson().fromJson<Secret>(reader)
   }
 }
