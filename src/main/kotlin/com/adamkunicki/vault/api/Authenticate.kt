@@ -32,7 +32,7 @@ class Authenticate(private val conf: VaultConfiguration) {
   fun token(newToken: String): Secret {
     val (request, response, result) = (conf.adddress + "/v1/auth/token/lookup-self")
         .httpGet()
-        .header(Pair("X-Vault-Token", conf.token))
+        .header("X-Vault-Token" to conf.token)
         .responseObject(Secret.Deserializer())
 
     return result
@@ -73,8 +73,7 @@ class Authenticate(private val conf: VaultConfiguration) {
   }
 
   fun ldap(username: String, password: String, options: List<Pair<String, Any?>> = emptyList()): Secret {
-    val (request, response, result) = (conf.adddress + "/v1/auth/ldap/login" +
-            URLEncoder.encode(username, UTF_8))
+    val (request, response, result) = (conf.adddress + "/v1/auth/ldap/login" + URLEncoder.encode(username, UTF_8))
         .httpPost()
         .body(
             jsonObject(
