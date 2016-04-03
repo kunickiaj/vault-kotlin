@@ -1,0 +1,19 @@
+{
+  "lease_id": "",
+  "renewable": false,
+  "lease_duration": 0,
+  "data": null,
+  "warnings": null,
+  "auth": {
+    "client_token": "c4f280f6-fdb2-18eb-89d3-589e2e834cdb",
+    "policies": [
+      "root"
+    ],
+    "metadata": {
+      "org": "test_org",
+      "username": "kunickiaj"
+    },
+    "lease_duration": 0,
+    "renewable": false
+  }
+}

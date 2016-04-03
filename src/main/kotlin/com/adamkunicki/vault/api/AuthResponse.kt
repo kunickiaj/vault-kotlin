@@ -14,10 +14,13 @@
  * limitations under the License.
  */
 
-package com.adamkunicki.vault.api.sys
+package com.adamkunicki.vault.api
 
-import com.adamkunicki.vault.VaultConfiguration
-
-class Sys(private val conf: VaultConfiguration) {
-  val auth = Auth(conf)
-}
+data class AuthResponse(
+    val client_token: String,
+    val accessor: String,
+    val policies: List<String>,
+    val metadata: Map<String, String>,
+    val lease_duration: Int,
+    val renewable: Boolean
+)

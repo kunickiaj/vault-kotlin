@@ -1,20 +1,17 @@
 /*
- * Licensed to the Apache Software Foundation (ASF) under one
- * or more contributor license agreements.  See the NOTICE file
- * distributed with this work for additional information
- * regarding copyright ownership.  The ASF licenses this file
- * to you under the Apache License, Version 2.0 (the
- * "License"); you may not use this file except in compliance
- * with the License.  You may obtain a copy of the License at
+ * Copyright 2016 Adam Kunicki
  *
- *   http://www.apache.org/licenses/LICENSE-2.0
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- * Unless required by applicable law or agreed to in writing,
- * software distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied.  See the License for the
- * specific language governing permissions and limitations
- * under the License.
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 package com.adamkunicki.vault.api
@@ -29,10 +26,21 @@ import java.net.URLEncoder
 class Authenticate(private val conf: VaultConfiguration) {
   val UTF_8 = Charsets.UTF_8.name()
 
+  /**
+   * Authenticate via the "token" authentication method. This authentication
+   * method is a bit bizarre because you already have a token, but hey,
+   * whatever floats your boat.
+   * 
+   * This method hits the `/v1/auth/token/lookup-self` endpoint after setting
+   * the Vault client's token to the given token parameter. If the self lookup
+   * succeeds, the token is returned.
+   *
+   * @return a [Secret] deserialized from the result.
+   */
   fun token(newToken: String): Secret {
     val (request, response, result) = (conf.adddress + "/v1/auth/token/lookup-self")
         .httpGet()
-        .header("X-Vault-Token" to conf.token)
+        .header("X-Vault-Token" to newToken)
         .responseObject(Secret.Deserializer())
 
     return result
@@ -55,12 +63,11 @@ class Authenticate(private val conf: VaultConfiguration) {
     return result
   }
 
-  fun userpass(username: String, password: String, options: List<Pair<String, Any?>> = emptyList()): Secret {
-    val (request, response, result) = (conf.adddress + "/v1/auth/userpass/login" + URLEncoder.encode(username, UTF_8))
+  fun userPass(username: String, password: String, options: List<Pair<String, Any?>> = emptyList()): Secret {
+    val (request, response, result) = (conf.adddress + "/v1/auth/userpass/login/" + URLEncoder.encode(username, UTF_8))
         .httpPost()
         .body(
             jsonObject(
-                "username" to username,
                 "password" to password,
                 *options.toTypedArray()
             ).toString(),
@@ -73,11 +80,10 @@ class Authenticate(private val conf: VaultConfiguration) {
   }
 
   fun ldap(username: String, password: String, options: List<Pair<String, Any?>> = emptyList()): Secret {
-    val (request, response, result) = (conf.adddress + "/v1/auth/ldap/login" + URLEncoder.encode(username, UTF_8))
+    val (request, response, result) = (conf.adddress + "/v1/auth/ldap/login/" + URLEncoder.encode(username, UTF_8))
         .httpPost()
         .body(
             jsonObject(
-                "username" to username,
                 "password" to password,
                 *options.toTypedArray()
             ).toString(),
