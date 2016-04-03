@@ -22,12 +22,11 @@ import com.github.kittinunf.fuel.httpGet
 import com.github.kittinunf.fuel.httpPut
 import com.github.salomonbrys.kotson.jsonObject
 
-
+@Suppress("UNUSED_VARIABLE")
 class Logical(private val conf: VaultConfiguration) {
-  val UTF_8 = Charsets.UTF_8.name()
 
   fun list(path: String): Secret {
-    val (request, response, result) = (conf.adddress + "/v1/" + path)
+    val (request, response, result) = (conf.adddress + "/v1/" + path.trim('/'))
         .httpGet(listOf(Pair("list", true)))
         .header(Pair("X-Vault-Token", conf.token))
         .responseObject(Secret.Deserializer())
@@ -36,7 +35,7 @@ class Logical(private val conf: VaultConfiguration) {
   }
 
   fun read(path: String): Secret {
-    val (request, response, result) = (conf.adddress + "/v1/" + path)
+    val (request, response, result) = (conf.adddress + "/v1/" + path.trim('/'))
         .httpGet()
         .header(Pair("X-Vault-Token", conf.token))
         .responseObject(Secret.Deserializer())
@@ -45,7 +44,7 @@ class Logical(private val conf: VaultConfiguration) {
   }
 
   fun write(path: String, data: List<Pair<String, Any?>>): Boolean {
-    val (request, response, result) = (conf.adddress + "/v1/" + path)
+    val (request, response, result) = (conf.adddress + "/v1/" + path.trim('/'))
         .httpPut()
         .body(jsonObject(*data.toTypedArray()).toString(), Charsets.UTF_8)
         .header(Pair("X-Vault-Token", conf.token))
@@ -55,10 +54,10 @@ class Logical(private val conf: VaultConfiguration) {
   }
 
   fun delete(path: String): Boolean {
-    val (request, response, result) = (conf.adddress + "/v1/" + path)
+    val (request, response, result) = (conf.adddress + "/v1/" + path.trim('/'))
         .httpDelete()
         .header(Pair("X-Vault-Token", conf.token))
-        .responseObject(Secret.Deserializer())
+        .response()
 
     return true
   }

@@ -4,13 +4,13 @@
   "lease_duration": 0,
   "data": null,
   "warnings": null,
-  "auth":{
+  "auth": {
     "client_token": "484791d3-513d-daa3-0ea2-52ed8e6983e7",
     "accessor": "b5e87f18-91d3-ea38-fe8b-e9543be554dc",
-    "policies":[
+    "policies": [
       "root"
     ],
-    "metadata":{
+    "metadata": {
       "username": "mitchellh"
     },
     "lease_duration": 0,

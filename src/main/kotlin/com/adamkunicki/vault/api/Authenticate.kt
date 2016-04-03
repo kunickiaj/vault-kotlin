@@ -22,7 +22,7 @@ import com.github.kittinunf.fuel.httpPost
 import com.github.salomonbrys.kotson.jsonObject
 import java.net.URLEncoder
 
-
+@Suppress("UNUSED_VARIABLE")
 class Authenticate(private val conf: VaultConfiguration) {
   val UTF_8 = Charsets.UTF_8.name()
 
