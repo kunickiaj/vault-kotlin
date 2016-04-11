@@ -16,8 +16,4 @@
 
 package com.adamkunicki.vault.api.sys
 
-import com.adamkunicki.vault.VaultConfiguration
-
-class Sys(private val conf: VaultConfiguration) {
-  val auth = Auth(conf)
-}
+data class AuthMount(val type: String, val description: String)

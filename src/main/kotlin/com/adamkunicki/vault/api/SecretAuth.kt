@@ -16,7 +16,7 @@
 
 package com.adamkunicki.vault.api
 
-data class AuthResponse(
+data class SecretAuth(
     val client_token: String,
     val accessor: String,
     val policies: List<String>,

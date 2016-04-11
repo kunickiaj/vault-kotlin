@@ -21,8 +21,8 @@ import com.github.kittinunf.fuel.httpPost
 import com.github.kittinunf.fuel.httpPut
 import com.github.salomonbrys.kotson.jsonObject
 
+@Suppress("UNUSED_VARIABLE")
 class AuthToken(private val conf: VaultConfiguration) {
-  val UTF_8 = Charsets.UTF_8.name()
 
   fun create(options: List<Pair<String, Any?>>): Secret {
     val (request, response, result) = (conf.adddress + "/v1/auth/token/create")

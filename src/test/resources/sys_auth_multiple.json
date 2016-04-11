@@ -1,0 +1,10 @@
+{
+  "github/": {
+    "description": "github access token",
+    "type": "github"
+  },
+  "token/": {
+    "description": "token based credentials",
+    "type": "token"
+  }
+}

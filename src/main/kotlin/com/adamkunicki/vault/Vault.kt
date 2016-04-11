@@ -19,7 +19,7 @@ package com.adamkunicki.vault
 import com.adamkunicki.vault.api.AuthToken
 import com.adamkunicki.vault.api.Authenticate
 import com.adamkunicki.vault.api.Logical
-import com.adamkunicki.vault.api.sys.Sys
+import com.adamkunicki.vault.api.Sys
 
 class Vault(private val conf: VaultConfiguration) {
   val auth = Authenticate(conf)

@@ -1,0 +1,6 @@
+{
+  "token/": {
+    "description": "token based credentials",
+    "type": "token"
+  }
+}

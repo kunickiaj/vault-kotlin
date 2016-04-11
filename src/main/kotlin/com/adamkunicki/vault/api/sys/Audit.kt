@@ -20,23 +20,21 @@ import com.adamkunicki.vault.VaultConfiguration
 import com.github.kittinunf.fuel.core.ResponseDeserializable
 import com.github.kittinunf.fuel.httpDelete
 import com.github.kittinunf.fuel.httpGet
-import com.github.kittinunf.fuel.httpPost
+import com.github.kittinunf.fuel.httpPut
 import com.github.salomonbrys.kotson.fromJson
 import com.github.salomonbrys.kotson.jsonObject
 import com.google.gson.Gson
 import java.io.Reader
-import java.net.URLEncoder
 
 @Suppress("UNUSED_VARIABLE")
-class Auth(private val conf: VaultConfiguration) {
-  val UTF_8 = Charsets.UTF_8.name()
+class Audit(private val conf: VaultConfiguration) {
 
-  class Deserializer : ResponseDeserializable<Map<String, AuthMount>> {
-    override fun deserialize(reader: Reader): Map<String, AuthMount> = Gson().fromJson<Map<String, AuthMount>>(reader)
+  class Deserializer : ResponseDeserializable<Map<String, AuditMount>> {
+    override fun deserialize(reader: Reader): Map<String, AuditMount> = Gson().fromJson<Map<String, AuditMount>>(reader)
   }
 
-  fun list(): Map<String, AuthMount> {
-    val (request, response, result) = (conf.adddress + "/v1/sys/auth")
+  fun list(): Map<String, AuditMount> {
+    val (request, response, result) = (conf.adddress + "/v1/sys/audit")
         .httpGet()
         .header(Pair("X-Vault-Token", conf.token))
         .responseObject(Deserializer())
@@ -44,14 +42,22 @@ class Auth(private val conf: VaultConfiguration) {
     return result
   }
 
-  fun enable(path: String, type: String, description: String = ""): Boolean {
-    val body = jsonObject("type" to type)
-    if (description.isNotBlank()) {
-      body.addProperty("description", description)
-    }
-    (conf.adddress + "/v1/sys/auth/" + URLEncoder.encode(path, UTF_8))
-        .httpPost()
-        .body(body.toString(), Charsets.UTF_8)
+  fun enable(
+      path: String,
+      type: String,
+      description: String = "",
+      options: List<Pair<String, Any?>> = emptyList()
+  ): Boolean {
+    val (request, response, result) = (conf.adddress + "/v1/sys/audit/" + path.trim('/'))
+        .httpPut()
+        .body(
+            jsonObject(
+                "type" to type,
+                "description" to description,
+                "options" to jsonObject(*options.toTypedArray())
+            ).toString(),
+            Charsets.UTF_8
+        )
         .header(Pair("X-Vault-Token", conf.token))
         .response()
 
@@ -59,7 +65,7 @@ class Auth(private val conf: VaultConfiguration) {
   }
 
   fun disable(path: String): Boolean {
-    (conf.adddress + "/v1/sys/auth/" + URLEncoder.encode(path, UTF_8))
+    val (request, response, result) = (conf.adddress + "/v1/sys/audit/" + path.trim('/'))
         .httpDelete()
         .header(Pair("X-Vault-Token", conf.token))
         .response()

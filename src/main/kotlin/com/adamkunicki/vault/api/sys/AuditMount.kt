@@ -14,21 +14,6 @@
  * limitations under the License.
  */
 
-package com.adamkunicki.vault.api
+package com.adamkunicki.vault.api.sys
 
-import com.github.kittinunf.fuel.core.ResponseDeserializable
-import com.github.salomonbrys.kotson.fromJson
-import com.google.gson.Gson
-import java.io.Reader
-
-data class Secret(
-    val lease_id: String,
-    val renewable: Boolean,
-    val lease_duration: Int,
-    val data: Map<String, Any?>,
-    val auth: SecretAuth
-) {
-  class Deserializer : ResponseDeserializable<Secret> {
-    override fun deserialize(reader: Reader): Secret = Gson().fromJson<Secret>(reader)
-  }
-}
+data class AuditMount(val description: String, val options: Map<String, Any?>, val path: String, val type: String)

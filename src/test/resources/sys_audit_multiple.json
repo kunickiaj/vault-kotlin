@@ -1,0 +1,18 @@
+{
+  "file-audit/": {
+    "description": "File audit",
+    "options": {
+      "path": "/tmp/vault"
+    },
+    "path": "file-audit/",
+    "type": "file"
+  },
+  "file-audit2/": {
+    "description": "",
+    "options": {
+      "path": "/tmp/vault2"
+    },
+    "path": "file-audit2/",
+    "type": "file"
+  }
+}

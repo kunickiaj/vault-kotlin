@@ -16,19 +16,11 @@
 
 package com.adamkunicki.vault.api
 
-import com.github.kittinunf.fuel.core.ResponseDeserializable
-import com.github.salomonbrys.kotson.fromJson
-import com.google.gson.Gson
-import java.io.Reader
+import com.adamkunicki.vault.VaultConfiguration
+import com.adamkunicki.vault.api.sys.Audit
+import com.adamkunicki.vault.api.sys.Auth
 
-data class Secret(
-    val lease_id: String,
-    val renewable: Boolean,
-    val lease_duration: Int,
-    val data: Map<String, Any?>,
-    val auth: SecretAuth
-) {
-  class Deserializer : ResponseDeserializable<Secret> {
-    override fun deserialize(reader: Reader): Secret = Gson().fromJson<Secret>(reader)
-  }
+class Sys(private val conf: VaultConfiguration) {
+  val auth = Auth(conf)
+  val audit = Audit(conf)
 }
