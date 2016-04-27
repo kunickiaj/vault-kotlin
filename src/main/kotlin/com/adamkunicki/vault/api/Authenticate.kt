@@ -17,9 +17,12 @@
 package com.adamkunicki.vault.api
 
 import com.adamkunicki.vault.VaultConfiguration
+import com.adamkunicki.vault.VaultError
+import com.adamkunicki.vault.VaultException
 import com.github.kittinunf.fuel.httpGet
 import com.github.kittinunf.fuel.httpPost
 import com.github.salomonbrys.kotson.jsonObject
+import com.google.gson.Gson
 import java.net.URLEncoder
 
 @Suppress("UNUSED_VARIABLE")
@@ -30,22 +33,35 @@ class Authenticate(private val conf: VaultConfiguration) {
    * Authenticate via the "token" authentication method. This authentication
    * method is a bit bizarre because you already have a token, but hey,
    * whatever floats your boat.
-   * 
+   *
    * This method hits the `/v1/auth/token/lookup-self` endpoint after setting
    * the Vault client's token to the given token parameter. If the self lookup
    * succeeds, the token is returned.
    *
    * @return a [Secret] deserialized from the result.
    */
+  @Throws(VaultException::class)
   fun token(newToken: String): Secret {
     val (request, response, result) = (conf.adddress + "/v1/auth/token/lookup-self")
         .httpGet()
         .header("X-Vault-Token" to newToken)
         .responseObject(Secret.Deserializer())
 
-    return result
+    val (secret, error) = result
+
+    if (secret != null) {
+      return secret
+    }
+    val errorMessage = if (error != null) {
+      Gson().fromJson(String(error.errorData), VaultError::class.java).errors.joinToString()
+    } else {
+      ""
+    }
+    throw VaultException(errorMessage)
   }
 
+  @JvmOverloads
+  @Throws(VaultException::class)
   fun appId(appId: String, userId: String, options: List<Pair<String, Any?>> = emptyList()): Secret {
     val (request, response, result) = (conf.adddress + "/v1/auth/app-id/login")
         .httpPost()
@@ -60,9 +76,21 @@ class Authenticate(private val conf: VaultConfiguration) {
         .header(Pair("X-Vault-Token", conf.token))
         .responseObject(Secret.Deserializer())
 
-    return result
+    val (secret, error) = result
+
+    if (secret != null) {
+      return secret
+    }
+    val errorMessage = if (error != null) {
+      Gson().fromJson(String(error.errorData), VaultError::class.java).errors.joinToString()
+    } else {
+      ""
+    }
+    throw VaultException(errorMessage)
   }
 
+  @JvmOverloads
+  @Throws(VaultException::class)
   fun userPass(username: String, password: String, options: List<Pair<String, Any?>> = emptyList()): Secret {
     val (request, response, result) = (conf.adddress + "/v1/auth/userpass/login/" + URLEncoder.encode(username, UTF_8))
         .httpPost()
@@ -76,9 +104,21 @@ class Authenticate(private val conf: VaultConfiguration) {
         .header(Pair("X-Vault-Token", conf.token))
         .responseObject(Secret.Deserializer())
 
-    return result
+    val (secret, error) = result
+
+    if (secret != null) {
+      return secret
+    }
+    val errorMessage = if (error != null) {
+      Gson().fromJson(String(error.errorData), VaultError::class.java).errors.joinToString()
+    } else {
+      ""
+    }
+    throw VaultException(errorMessage)
   }
 
+  @JvmOverloads
+  @Throws(VaultException::class)
   fun ldap(username: String, password: String, options: List<Pair<String, Any?>> = emptyList()): Secret {
     val (request, response, result) = (conf.adddress + "/v1/auth/ldap/login/" + URLEncoder.encode(username, UTF_8))
         .httpPost()
@@ -92,9 +132,20 @@ class Authenticate(private val conf: VaultConfiguration) {
         .header(Pair("X-Vault-Token", conf.token))
         .responseObject(Secret.Deserializer())
 
-    return result
+    val (secret, error) = result
+
+    if (secret != null) {
+      return secret
+    }
+    val errorMessage = if (error != null) {
+      Gson().fromJson(String(error.errorData), VaultError::class.java).errors.joinToString()
+    } else {
+      ""
+    }
+    throw VaultException(errorMessage)
   }
 
+  @Throws(VaultException::class)
   fun github(githubToken: String): Secret {
     val (request, response, result) = (conf.adddress + "/v1/auth/github/login")
         .httpPost()
@@ -102,6 +153,16 @@ class Authenticate(private val conf: VaultConfiguration) {
         .header(Pair("X-Vault-Token", conf.token))
         .responseObject(Secret.Deserializer())
 
-    return result
+    val (secret, error) = result
+
+    if (secret != null) {
+      return secret
+    }
+    val errorMessage = if (error != null) {
+      Gson().fromJson(String(error.errorData), VaultError::class.java).errors.joinToString()
+    } else {
+      ""
+    }
+    throw VaultException(errorMessage)
   }
 }

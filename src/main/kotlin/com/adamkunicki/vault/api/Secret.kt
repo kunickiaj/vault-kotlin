@@ -26,7 +26,8 @@ data class Secret(
     val renewable: Boolean,
     val lease_duration: Int,
     val data: Map<String, Any?>,
-    val auth: SecretAuth
+    val auth: SecretAuth,
+    val errors: Array<String>
 ) {
   class Deserializer : ResponseDeserializable<Secret> {
     override fun deserialize(reader: Reader): Secret = Gson().fromJson<Secret>(reader)

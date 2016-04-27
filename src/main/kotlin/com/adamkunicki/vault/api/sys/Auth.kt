@@ -17,6 +17,8 @@
 package com.adamkunicki.vault.api.sys
 
 import com.adamkunicki.vault.VaultConfiguration
+import com.adamkunicki.vault.VaultError
+import com.adamkunicki.vault.VaultException
 import com.github.kittinunf.fuel.core.ResponseDeserializable
 import com.github.kittinunf.fuel.httpDelete
 import com.github.kittinunf.fuel.httpGet
@@ -35,13 +37,24 @@ class Auth(private val conf: VaultConfiguration) {
     override fun deserialize(reader: Reader): Map<String, AuthMount> = Gson().fromJson<Map<String, AuthMount>>(reader)
   }
 
+  @Throws(VaultException::class)
   fun list(): Map<String, AuthMount> {
     val (request, response, result) = (conf.adddress + "/v1/sys/auth")
         .httpGet()
         .header(Pair("X-Vault-Token", conf.token))
         .responseObject(Deserializer())
 
-    return result
+    val (secret, error) = result
+
+    if (secret != null) {
+      return secret
+    }
+    val errorMessage = if (error != null) {
+      Gson().fromJson(String(error.errorData), VaultError::class.java).errors.joinToString()
+    } else {
+      ""
+    }
+    throw VaultException(errorMessage)
   }
 
   fun enable(path: String, type: String, description: String = ""): Boolean {

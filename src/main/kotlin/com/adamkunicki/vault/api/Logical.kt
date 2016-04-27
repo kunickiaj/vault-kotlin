@@ -17,30 +17,55 @@
 package com.adamkunicki.vault.api
 
 import com.adamkunicki.vault.VaultConfiguration
+import com.adamkunicki.vault.VaultError
+import com.adamkunicki.vault.VaultException
 import com.github.kittinunf.fuel.httpDelete
 import com.github.kittinunf.fuel.httpGet
 import com.github.kittinunf.fuel.httpPut
 import com.github.salomonbrys.kotson.jsonObject
+import com.google.gson.Gson
 
 @Suppress("UNUSED_VARIABLE")
 class Logical(private val conf: VaultConfiguration) {
 
+  @Throws(VaultException::class)
   fun list(path: String): Secret {
     val (request, response, result) = (conf.adddress + "/v1/" + path.trim('/'))
         .httpGet(listOf(Pair("list", true)))
         .header(Pair("X-Vault-Token", conf.token))
         .responseObject(Secret.Deserializer())
 
-    return result
+    val (secret, error) = result
+
+    if (secret != null) {
+      return secret
+    }
+    val errorMessage = if (error != null) {
+      Gson().fromJson(String(error.errorData), VaultError::class.java).errors.joinToString()
+    } else {
+      ""
+    }
+    throw VaultException(errorMessage)
   }
 
+  @Throws(VaultException::class)
   fun read(path: String): Secret {
     val (request, response, result) = (conf.adddress + "/v1/" + path.trim('/'))
         .httpGet()
         .header(Pair("X-Vault-Token", conf.token))
         .responseObject(Secret.Deserializer())
 
-    return result
+    val (secret, error) = result
+
+    if (secret != null) {
+      return secret
+    }
+    val errorMessage = if (error != null) {
+      Gson().fromJson(String(error.errorData), VaultError::class.java).errors.joinToString()
+    } else {
+      ""
+    }
+    throw VaultException(errorMessage)
   }
 
   fun write(path: String, data: List<Pair<String, Any?>>): Boolean {

@@ -1,5 +1,5 @@
 group 'com.adamkunicki'
-version '0.1.0'
+version '0.2.0'
 
 buildscript {
   repositories {
@@ -18,7 +18,7 @@ apply plugin: 'maven'
 apply plugin: 'maven-publish'
 apply plugin: 'com.jfrog.bintray'
 
-sourceCompatibility = 1.8
+sourceCompatibility = 1.7
 
 repositories {
   mavenCentral()
@@ -41,7 +41,7 @@ publishing {
       artifact sourceJar
       groupId 'com.adamkunicki'
       artifactId 'vault-kotlin'
-      version '0.1.0'
+      version '0.2.0'
     }
   }
 }
@@ -56,14 +56,14 @@ bintray {
     licenses = ['Apache-2.0']
     vcsUrl = 'https://github.com/kunickiaj/vault-kotlin.git'
     version {
-      name = '0.1.0'
+      name = '0.2.0'
     }
   }
   publications = ['bintrayPublication']
 }
 
 dependencies {
-  compile 'com.github.kittinunf.fuel:fuel:1.1.0'
+  compile 'com.github.kittinunf.fuel:fuel:1.2.0'
   compile 'com.github.salomonbrys.kotson:kotson:2.1.0'
   compile 'org.slf4j:slf4j-api:1.7.19'
   compile 'org.slf4j:slf4j-log4j12:1.7.19'

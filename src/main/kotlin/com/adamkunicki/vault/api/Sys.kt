@@ -19,8 +19,10 @@ package com.adamkunicki.vault.api
 import com.adamkunicki.vault.VaultConfiguration
 import com.adamkunicki.vault.api.sys.Audit
 import com.adamkunicki.vault.api.sys.Auth
+import com.adamkunicki.vault.api.sys.Lease
 
 class Sys(private val conf: VaultConfiguration) {
   val auth = Auth(conf)
   val audit = Audit(conf)
+  val lease = Lease(conf)
 }
