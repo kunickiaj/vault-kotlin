@@ -75,9 +75,9 @@ class TestLease {
         )
         .respond(
             HttpResponse.response()
-                .withStatusCode(HttpStatusCode.NO_CONTENT_204.code())
+                .withStatusCode(HttpStatusCode.BAD_REQUEST_400.code())
                 .withHeader(contentJson)
-//                .withBody(getReader("/sys_lease_renew_error.json").readText())
+                .withBody(getReader("/sys_lease_renew_error.json").readText())
         )
     lease.renew(leaseId)
   }
