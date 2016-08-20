@@ -1,4 +1,5 @@
 # vault-kotlin
+[ ![Download](https://api.bintray.com/packages/kunickiaj/maven/vault-kotlin/images/download.svg) ](https://bintray.com/kunickiaj/maven/vault-kotlin/_latestVersion)
 [ ![Kotlin](https://img.shields.io/badge/Kotlin-1.0.3-blue.svg)](http://kotlinlang.org)
 [![Build Status](https://travis-ci.org/kunickiaj/vault-kotlin.svg?branch=master)](https://travis-ci.org/kunickiaj/vault-kotlin)
 [![License](https://img.shields.io/github/license/kunickiaj/vault-kotlin.svg)](https://github.com/kunickiaj/vault-kotlin/blob/master/LICENSE)
