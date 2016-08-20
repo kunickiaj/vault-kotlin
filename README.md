@@ -11,8 +11,13 @@ Hashicorp Vault client library written in Kotlin
 Install
 -------
 
-Download from Bintray using the badge above.
-jCenter published artifacts coming soon.
+Releases
+========
+
+Releases are published to [jCenter](https://bintray.com/bintray/jcenter).
+
+Building From Source
+====================
 
 Gradle:
 
