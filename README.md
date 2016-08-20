@@ -1,6 +1,5 @@
 # vault-kotlin
-
-[ ![Kotlin](https://img.shields.io/badge/Kotlin-1.0.1-blue.svg)](http://kotlinlang.org)
+[ ![Kotlin](https://img.shields.io/badge/Kotlin-1.0.3-blue.svg)](http://kotlinlang.org)
 [![Build Status](https://travis-ci.org/kunickiaj/vault-kotlin.svg?branch=master)](https://travis-ci.org/kunickiaj/vault-kotlin)
 [![License](https://img.shields.io/github/license/kunickiaj/vault-kotlin.svg)](https://github.com/kunickiaj/vault-kotlin/blob/master/LICENSE)
 
@@ -10,6 +9,9 @@ Hashicorp Vault client library written in Kotlin
 
 Install
 -------
+
+Download from Bintray using the badge above.
+jCenter published artifacts coming soon.
 
 Gradle:
 
